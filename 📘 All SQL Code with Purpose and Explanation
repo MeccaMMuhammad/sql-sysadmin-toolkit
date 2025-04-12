@@ -1,0 +1,134 @@
+Basic Filtering and WHERE Clauses
+
+Code:
+
+SELECT * 
+FROM logins 
+WHERE login_date >= '2023-01-01';
+
+Purpose: Retrieves all login records from Jan 1, 2023 onward.
+Why: Helps investigate login patterns after a specific date.
+
+
+SELECT * 
+FROM logins 
+WHERE success = 0;
+
+Purpose: Finds failed login attempts.
+Why: Useful for identifying brute-force or unauthorized access attempts.
+
+
+SELECT * 
+FROM logins 
+WHERE event_id = 'AUTH_FAIL';
+
+Purpose: Targets failed authentications specifically.
+Why: Focuses the query on a security-relevant event.
+
+Logical Operators and Multiple Conditions
+
+SELECT * 
+FROM logins 
+WHERE event_id = 'AUTH_FAIL' AND login_date >= '2023-01-01';
+
+Purpose: Failed login attempts after a certain date.
+Why: Time-bound search for suspicious activity.
+
+
+SELECT * 
+FROM logins 
+WHERE user_id = 'alice' OR user_id = 'bob';
+
+Purpose: Retrieve logins by specific users.
+Why: Track users of interest.
+
+
+SELECT * 
+FROM logins 
+WHERE NOT success;
+
+Purpose: Another way to find failed logins.
+Why: Equivalent to success = 0.
+
+Filtering Date, Time, and Numeric Data
+
+SELECT * 
+FROM logins 
+WHERE login_time >= '12:00:00';
+
+Purpose: Only afternoon or later logins.
+Why: Investigate out-of-schedule access.
+
+
+SELECT * 
+FROM logins 
+WHERE login_date BETWEEN '2023-01-01' AND '2023-01-31';
+
+Purpose: Logins in January.
+Why: Useful for period-based reporting.
+
+JOINs and Multi-Table Queries
+
+SELECT employees.name, machines.device_id 
+FROM employees 
+INNER JOIN machines 
+ON employees.employee_id = machines.employee_id;
+
+Purpose: Show which employee uses which machine.
+Why: Link identity to asset.
+
+
+SELECT * 
+FROM employees 
+LEFT JOIN logins 
+ON employees.employee_id = logins.employee_id;
+
+Purpose: All employees, even those who never logged in.
+Why: Spot inactive or missing accounts.
+
+
+SELECT * 
+FROM logins 
+RIGHT JOIN machines 
+ON logins.device_id = machines.device_id;
+
+Purpose: All machine data including ones without recent logins.
+Why: Validate usage or unused systems.
+
+SQL Statements and Explanations
+SQL to retrieve all records with 'z' in name column
+
+SELECT name 
+FROM employees 
+WHERE name LIKE '%z%';
+
+Purpose: Pattern search using LIKE.
+Why: Finds partial matches in strings.
+
+Filter employees hired on/after a date
+
+SELECT firstname, lastname, hiredate 
+FROM employees 
+WHERE hiredate >= '2003-10-17';
+
+Purpose: Date filter.
+Why: Find newer hires.
+
+Customers in USA and CA
+
+SELECT firstname, lastname, address, country 
+FROM customers 
+WHERE country = 'USA' AND state = 'CA';
+
+Purpose: Multi-condition filtering.
+Why: Narrow search to location.
+
+Join to return all machine records and matched employees
+
+SELECT * 
+FROM employees 
+RIGHT JOIN machines 
+ON employees.employee_id = machines.employee_id;
+
+Purpose: Keep all machines even if no matched employee.
+Why: Audit for orphaned assets.
